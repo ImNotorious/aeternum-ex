@@ -1,9 +1,16 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Brain, Shield, Zap, Clock, Users, Sparkles } from "lucide-react"
 
 export function FloatingIcons() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const icons = [
     { icon: <Brain className="h-8 w-8 text-primary/30" />, x: "10%", y: "20%" },
     { icon: <Shield className="h-8 w-8 text-primary/30" />, x: "80%", y: "15%" },
@@ -12,6 +19,8 @@ export function FloatingIcons() {
     { icon: <Users className="h-8 w-8 text-primary/30" />, x: "40%", y: "30%" },
     { icon: <Sparkles className="h-8 w-8 text-primary/30" />, x: "60%", y: "60%" },
   ]
+
+  if (!mounted) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

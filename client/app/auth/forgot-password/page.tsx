@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -19,19 +20,13 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [icons, setIcons] = useState<any[]>([])
+  const [mounted, setMounted] = useState(false)
+  const [windowHeight, setWindowHeight] = useState(800) // Default fallback height
 
-  // Ensuring window is only used on the client
   useEffect(() => {
+    setMounted(true)
     if (typeof window !== "undefined") {
-      setIcons([
-        { icon: <Brain className="h-8 w-8 text-primary/30" />, delay: 0 },
-        { icon: <Shield className="h-8 w-8 text-primary/30" />, delay: 1.5 },
-        { icon: <Zap className="h-8 w-8 text-primary/30" />, delay: 0.8 },
-        { icon: <Clock className="h-8 w-8 text-primary/30" />, delay: 2.2 },
-        { icon: <Users className="h-8 w-8 text-primary/30" />, delay: 1.2 },
-        { icon: <Sparkles className="h-8 w-8 text-primary/30" />, delay: 0.5 },
-      ])
+      setWindowHeight(window.innerHeight)
     }
   }, [])
 
@@ -51,6 +46,20 @@ export default function ForgotPasswordPage() {
     }
   }
 
+  // Floating icons animation
+  const icons = [
+    { icon: <Brain className="h-8 w-8 text-primary/30" />, delay: 0 },
+    { icon: <Shield className="h-8 w-8 text-primary/30" />, delay: 1.5 },
+    { icon: <Zap className="h-8 w-8 text-primary/30" />, delay: 0.8 },
+    { icon: <Clock className="h-8 w-8 text-primary/30" />, delay: 2.2 },
+    { icon: <Users className="h-8 w-8 text-primary/30" />, delay: 1.2 },
+    { icon: <Sparkles className="h-8 w-8 text-primary/30" />, delay: 0.5 },
+  ]
+
+  if (!mounted) {
+    return null // Return null on server-side to prevent hydration errors
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-primary/5 via-background/0 to-background overflow-hidden">
       {/* Floating icons */}
@@ -62,7 +71,7 @@ export default function ForgotPasswordPage() {
             initial={{ x: Math.random() * 100 - 50, y: -50, opacity: 0 }}
             animate={{
               x: [Math.random() * 100 - 50, Math.random() * 100 - 50, Math.random() * 100 - 50],
-              y: [0, 100, 200], // Simpler animation to avoid SSR issues
+              y: [Math.random() * windowHeight, Math.random() * windowHeight, Math.random() * windowHeight],
               opacity: [0, 1, 0],
             }}
             transition={{
@@ -76,6 +85,10 @@ export default function ForgotPasswordPage() {
           </motion.div>
         ))}
       </div>
+
+      {/* Glowing background */}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background/0 to-transparent pointer-events-none"></div>
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -99,34 +112,73 @@ export default function ForgotPasswordPage() {
         >
           <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm shadow-xl">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-                Reset Password
-              </CardTitle>
-              <CardDescription className="text-center">
-                Enter your email address and we'll send you a link to reset your password
-              </CardDescription>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <CardTitle className="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+                  Reset Password
+                </CardTitle>
+                <CardDescription className="text-center">
+                  Enter your email address and we'll send you a link to reset your password
+                </CardDescription>
+              </motion.div>
             </CardHeader>
             <CardContent>
               {error && (
-                <Alert variant="destructive" className="mb-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                </motion.div>
               )}
 
               {success ? (
-                <div className="text-center space-y-4">
-                  <div className="flex justify-center">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center space-y-4"
+                >
+                  <motion.div
+                    className="flex justify-center"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1, rotate: 360 }}
+                    transition={{ type: "spring", stiffness: 100 }}
+                  >
                     <CheckCircle className="h-16 w-16 text-green-500" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Check your email</h3>
-                  <p className="text-muted-foreground">
-                    We've sent a password reset link to your email. Please check your inbox.
-                  </p>
-                </div>
+                  </motion.div>
+                  <motion.h3
+                    className="text-lg font-semibold"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    Check your email
+                  </motion.h3>
+                  <motion.p
+                    className="text-muted-foreground"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    We've sent a password reset link to your email. Please check your inbox and follow the instructions
+                    to reset your password.
+                  </motion.p>
+                </motion.div>
               ) : (
                 <form onSubmit={handleResetPassword} className="space-y-4">
-                  <div className="space-y-2">
+                  <motion.div
+                    className="space-y-2"
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                  >
                     <Label htmlFor="email">Email</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -140,22 +192,46 @@ export default function ForgotPasswordPage() {
                         required
                       />
                     </div>
-                  </div>
-                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
-                    {loading ? "Sending..." : "Send Reset Link"}
-                  </Button>
+                  </motion.div>
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.2 }}
+                  >
+                    <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={loading}>
+                      {loading ? "Sending..." : "Send Reset Link"}
+                    </Button>
+                  </motion.div>
                 </form>
               )}
             </CardContent>
             <CardFooter className="flex justify-center">
-              <Link href="/auth/login" className="flex items-center text-sm text-primary hover:underline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to login
-              </Link>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.3 }}>
+                <Link href="/auth/login" className="flex items-center text-sm text-primary hover:underline">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to login
+                </Link>
+              </motion.div>
             </CardFooter>
           </Card>
+        </motion.div>
+
+        {/* Hackathon badge */}
+        <motion.div
+          className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full transform rotate-12 shadow-lg"
+          initial={{ scale: 0, rotate: 45 }}
+          animate={{ scale: 1, rotate: 12 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 15,
+            delay: 0.8,
+          }}
+        >
+          <span className="text-xs font-bold">Hackathon Winner 🏆</span>
         </motion.div>
       </motion.div>
     </div>
   )
 }
+

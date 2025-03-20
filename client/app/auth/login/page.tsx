@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -27,6 +27,15 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("login")
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [windowHeight, setWindowHeight] = useState(800) // Default fallback height
+
+  useEffect(() => {
+    setMounted(true)
+    if (typeof window !== "undefined") {
+      setWindowHeight(window.innerHeight)
+    }
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -94,6 +103,10 @@ export default function LoginPage() {
     { icon: <Sparkles className="h-8 w-8 text-primary/30" />, delay: 0.5 },
   ]
 
+  if (!mounted) {
+    return null // Return null on server-side to prevent hydration errors
+  }
+
   if (showSuccessAnimation) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-primary/5 via-background/0 to-background">
@@ -151,11 +164,7 @@ export default function LoginPage() {
             initial={{ x: Math.random() * 100 - 50, y: -50, opacity: 0 }}
             animate={{
               x: [Math.random() * 100 - 50, Math.random() * 100 - 50, Math.random() * 100 - 50],
-              y: [
-                Math.random() * window.innerHeight,
-                Math.random() * window.innerHeight,
-                Math.random() * window.innerHeight,
-              ],
+              y: [Math.random() * windowHeight, Math.random() * windowHeight, Math.random() * windowHeight],
               opacity: [0, 1, 0],
             }}
             transition={{

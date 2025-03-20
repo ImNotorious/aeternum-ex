@@ -62,9 +62,9 @@
     "framer-motion": "latest",
     "three": "latest",
     "ethers": "latest",
+    "firebase": "latest",
     "react-particles": "latest",
-    "tsparticles-slim": "latest",
-    "firebase": "latest"
+    "tsparticles-slim": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",

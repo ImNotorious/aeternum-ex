@@ -226,6 +226,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Rest of the component remains the same */}
       {/* How It Works Section */}
       <section className="py-20 md:py-32 relative overflow-hidden border-t border-primary/10 bg-gradient-to-b from-background/95 to-background">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary/10 via-background/0 to-transparent pointer-events-none"></div>
