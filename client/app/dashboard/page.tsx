@@ -1,0 +1,175 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
+import { useWeb3 } from "@/hooks/use-web3"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Calendar, FileText, Wallet } from "lucide-react"
+import DashboardAppointments from "@/components/dashboard/appointments"
+import DashboardPayments from "@/components/dashboard/payments"
+import DashboardMedicalRecords from "@/components/dashboard/medical-records"
+import { GlowingButton } from "@/components/ui/glowing-button"
+
+export default function DashboardPage() {
+  const router = useRouter()
+  const { account, connectWallet } = useWeb3()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  // Redirect to login if not connected
+  if (!account) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] p-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle>Connect Wallet</CardTitle>
+              <CardDescription>Please connect your wallet to access the dashboard</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-sm text-muted-foreground">
+                You need to connect your MetaMask or other Web3 wallet to access your medical dashboard.
+              </p>
+              <GlowingButton onClick={connectWallet} className="w-full">
+                Connect Wallet
+              </GlowingButton>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
+        <div className="flex items-center justify-between">
+          <motion.h2
+            className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Dashboard
+          </motion.h2>
+          <motion.div
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden md:flex border-primary/20 bg-primary/5 hover:bg-primary/10"
+            >
+              <Calendar className="mr-2 h-4 w-4" />
+              Book Appointment
+            </Button>
+            <GlowingButton size="sm" className="hidden md:flex">
+              <FileText className="mr-2 h-4 w-4" />
+              Upload Medical Record
+            </GlowingButton>
+          </motion.div>
+        </div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/50 group">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Appointments</CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:scale-110 group-hover:text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">12</div>
+                <p className="text-xs text-muted-foreground">+2 from last month</p>
+              </CardContent>
+            </Card>
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/50 group">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending Reports</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:scale-110 group-hover:text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">3</div>
+                <p className="text-xs text-muted-foreground">-2 from last month</p>
+              </CardContent>
+            </Card>
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/50 group">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Medical Records</CardTitle>
+                <FileText className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:scale-110 group-hover:text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">24</div>
+                <p className="text-xs text-muted-foreground">+4 from last month</p>
+              </CardContent>
+            </Card>
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:shadow-primary/10 hover:border-primary/50 group">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
+                <Wallet className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-hover:scale-110 group-hover:text-primary" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">0.24 ETH</div>
+                <p className="text-xs text-muted-foreground">~$480.00 USD</p>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <Tabs defaultValue="appointments" className="space-y-4">
+            <TabsList className="bg-primary/10 p-1">
+              <TabsTrigger
+                value="appointments"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Appointments
+              </TabsTrigger>
+              <TabsTrigger
+                value="payments"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Payments
+              </TabsTrigger>
+              <TabsTrigger
+                value="medical-records"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Medical Records
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="appointments" className="space-y-4">
+              <DashboardAppointments />
+            </TabsContent>
+            <TabsContent value="payments" className="space-y-4">
+              <DashboardPayments />
+            </TabsContent>
+            <TabsContent value="medical-records" className="space-y-4">
+              <DashboardMedicalRecords />
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
