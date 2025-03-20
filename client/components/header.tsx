@@ -134,7 +134,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -152,7 +152,7 @@ export default function Header() {
               </motion.div>
             </AnimatePresence>
             <span className="sr-only">Toggle theme</span>
-          </Button>
+          </Button> */}
 
           <div className="hidden md:flex items-center gap-2">
             {!user ? (

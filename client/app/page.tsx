@@ -61,11 +61,11 @@ export default function Home() {
                     className="mb-2 px-3 py-1 text-sm bg-primary/10 text-primary border-primary/20"
                     variant="outline"
                   >
-                    Blockchain Powered
+                    AI-ML & Blockchain Powered
                   </Badge>
                 </motion.div>
                 <motion.h1
-                  className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary-foreground"
+                  className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text "
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.3 }}
@@ -97,7 +97,7 @@ export default function Home() {
                   <Link href="/learn-more">Learn More</Link>
                 </Button>
               </motion.div>
-              {!account && (
+              {/* {!account && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ export default function Home() {
                     Connect Wallet
                   </Button>
                 </motion.div>
-              )}
+              )} */}
               {account && (
                 <motion.p
                   className="text-sm text-muted-foreground"
@@ -176,7 +176,7 @@ export default function Home() {
             <Badge className="mb-2" variant="outline">
               Revolutionary Features
             </Badge>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primaryvia-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary to-primary-foreground">
               Why Choose Aeternum?
             </h2>
             <p className="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">
@@ -242,7 +242,7 @@ export default function Home() {
             <Badge className="mb-2" variant="outline">
               Simple Process
             </Badge>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primaryvia-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary to-primary-foreground">
               How It Works
             </h2>
             <p className="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">
@@ -330,7 +330,7 @@ export default function Home() {
             <Badge className="mb-2" variant="outline">
               Testimonials
             </Badge>
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primaryvia-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary to-primary-foreground">
               What Our Users Say
             </h2>
             <p className="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">
@@ -376,7 +376,7 @@ export default function Home() {
           className="flex flex-col items-center justify-center space-y-4 text-center"
         >
           <div className="rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 p-8 md:p-12 shadow-lg border border-primary/20 backdrop-blur-sm max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl bg-clip-text ">
               Ready to Transform Healthcare?
             </h2>
             <p className="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">

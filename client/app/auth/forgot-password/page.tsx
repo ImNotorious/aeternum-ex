@@ -217,19 +217,7 @@ export default function ForgotPasswordPage() {
         </motion.div>
 
         {/* Hackathon badge */}
-        <motion.div
-          className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full transform rotate-12 shadow-lg"
-          initial={{ scale: 0, rotate: 45 }}
-          animate={{ scale: 1, rotate: 12 }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 15,
-            delay: 0.8,
-          }}
-        >
-          <span className="text-xs font-bold">Hackathon Winner 🏆</span>
-        </motion.div>
+        {/*  */}
       </motion.div>
     </div>
   )

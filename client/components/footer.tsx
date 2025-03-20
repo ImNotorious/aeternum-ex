@@ -23,7 +23,7 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground max-w-xs">
               Revolutionising Safe and Effective Medical Diagnosis using Machine Learning and Blockchain
             </p>
-            <div className="flex gap-4">
+            {/* <div className="flex gap-4">
               <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>
                 <Link href="#" aria-label="Facebook">
                   <Facebook className="h-5 w-5" />
@@ -49,7 +49,7 @@ export default function Footer() {
                   <Github className="h-5 w-5" />
                 </Link>
               </Button>
-            </div>
+            </div> */}
           </motion.div>
           <motion.div
             className="space-y-4"
@@ -59,7 +59,7 @@ export default function Footer() {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             <h3 className="text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2">
+            <ul className="flex flex-row flex-wrap gap-x-4 gap-y-10">
               <li>
                 <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Home
@@ -87,7 +87,7 @@ export default function Footer() {
               </li>
             </ul>
           </motion.div>
-          <motion.div
+          {/* <motion.div
             className="space-y-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -117,24 +117,7 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </motion.div>
-          <motion.div
-            className="space-y-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-          >
-            <h3 className="text-lg font-semibold">Newsletter</h3>
-            <p className="text-sm text-muted-foreground">Subscribe to our newsletter for the latest updates</p>
-            <div className="flex gap-2">
-              <Input
-                placeholder="Enter your email"
-                className="max-w-[220px] border-primary/20 bg-primary/5 focus-visible:ring-primary"
-              />
-              <Button className="bg-primary hover:bg-primary/90">Subscribe</Button>
-            </div>
-          </motion.div>
+          </motion.div> */}
         </div>
         <motion.div
           className="mt-12 border-t border-primary/10 pt-6 text-center text-sm text-muted-foreground"

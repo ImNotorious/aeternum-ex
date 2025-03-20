@@ -12,27 +12,23 @@ import { ArrowRight, Award, Users, Target, Heart, Lightbulb, Shield } from "luci
 export default function AboutPage() {
   const team = [
     {
-      name: "Dr. Sarah Johnson",
-      role: "Founder & CEO",
-      bio: "Cardiologist with 15+ years of experience and a passion for healthcare innovation.",
+      name: "Akshat Jain",
+      
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
-      name: "Michael Chen",
-      role: "CTO",
-      bio: "AI researcher with expertise in machine learning applications for medical imaging.",
+      name: "Amulya Tripathi",
+      
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
-      name: "Emily Rodriguez",
-      role: "Head of Blockchain",
-      bio: "Blockchain expert with a background in healthcare data security and privacy.",
+      name: "Aryan Sethi",
+      
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
-      name: "Dr. James Wilson",
-      role: "Medical Director",
-      bio: "Neurologist specializing in diagnostic imaging and telemedicine implementation.",
+      name: "Suman Sharma",
+      
       avatar: "/placeholder.svg?height=100&width=100",
     },
   ]
@@ -86,7 +82,7 @@ export default function AboutPage() {
         <Badge className="mb-2" variant="outline">
           About Us
         </Badge>
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary via-primary to-primary-foreground">
           Our Mission & Vision
         </h1>
         <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
@@ -95,6 +91,7 @@ export default function AboutPage() {
       </motion.div>
 
       <Tabs defaultValue="mission" className="mb-16">
+      <div className="flex justify-center">
         <TabsList className="bg-primary/10 p-1 mx-auto">
           <TabsTrigger
             value="mission"
@@ -115,12 +112,14 @@ export default function AboutPage() {
             Our Values
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="mission" className="mt-6">
+        </div>
+        
+        <TabsContent value="mission" className="mt-6 flex justify-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-3xl w-full px-4"
           >
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-4">Transforming Healthcare Through Technology</h2>
@@ -150,22 +149,19 @@ export default function AboutPage() {
             </div>
           </motion.div>
         </TabsContent>
-        <TabsContent value="story" className="mt-6">
+        <TabsContent value="story" className="mt-6 flex justify-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-3xl mx-auto"
+            className="max-w-3xl w-full px-4"
           >
             <div className="space-y-8">
               <div className="relative pl-8 border-l border-primary/20">
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2019: The Beginning</h3>
                 <p className="text-muted-foreground">
-                  Aeternum was founded by Dr. Sarah Johnson, a cardiologist who witnessed firsthand the challenges of
-                  delayed diagnoses and fragmented medical records. After losing a patient due to a late diagnosis that
-                  could have been prevented with better technology, she assembled a team of medical professionals, AI
-                  researchers, and blockchain experts to create a solution.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. In modi totam cum, sunt rem est fugit itaque tempora odio reiciendis numquam, molestiae officia? Dicta alias possimus explicabo corporis iusto facere temporibus quo ipsa sit. Animi, minima aliquam pariatur voluptate quis est placeat temporibus iure tempora quam veniam explicabo hic quisquam.
                 </p>
               </div>
 
@@ -173,10 +169,7 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2020: Research & Development</h3>
                 <p className="text-muted-foreground">
-                  The team spent a year developing and training AI models on millions of anonymized medical images,
-                  achieving breakthrough accuracy rates in detecting early signs of diseases. Simultaneously, they
-                  designed a blockchain architecture that would ensure patient data security while enabling seamless
-                  sharing with authorized healthcare providers.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi delectus, quae esse nulla dolorum obcaecati architecto. Nisi minus officia dolore rerum soluta. Quam, tempore neque aperiam optio aliquid quo consequatur animi beatae facilis? Non qui a, distinctio voluptatibus blanditiis ipsum nisi modi iure error et porro omnis minima accusamus sint?
                 </p>
               </div>
 
@@ -184,10 +177,7 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2021: Beta Launch</h3>
                 <p className="text-muted-foreground">
-                  Aeternum launched its beta platform with a select group of healthcare providers and patients. The
-                  initial results were promising, with the AI system detecting early-stage conditions that had been
-                  missed in conventional diagnoses. The blockchain component ensured that all data transfers were secure
-                  and transparent.
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti repellat molestiae esse iusto enim fugit obcaecati minus asperiores iure? Distinctio, modi numquam? Corporis ipsa laborum exercitationem maxime alias commodi placeat quos voluptatibus sint! Quo natus, eos tempora voluptate hic nisi, consequuntur nostrum, fugit omnis error odio nesciunt amet odit nam!
                 </p>
               </div>
 
@@ -195,10 +185,7 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2022: Global Expansion</h3>
                 <p className="text-muted-foreground">
-                  Following the successful beta phase, Aeternum expanded its services globally, partnering with
-                  hospitals, clinics, and healthcare systems across multiple countries. The platform continued to
-                  evolve, adding telemedicine capabilities and expanding its AI diagnostic range to cover more medical
-                  conditions.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere id error dicta corporis repellat dolore expedita molestias assumenda at debitis dolores in ipsa repudiandae quos explicabo libero, nemo saepe. Exercitationem repellat quaerat nemo, vero rem odit. Blanditiis deserunt, consequuntur, dolor officiis et est natus quaerat, ipsa deleniti ut perferendis doloribus!
                 </p>
               </div>
 
@@ -206,16 +193,14 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">Today: Leading the Revolution</h3>
                 <p className="text-muted-foreground">
-                  Today, Aeternum stands at the forefront of the healthcare technology revolution, serving thousands of
-                  patients and healthcare providers worldwide. Our platform continues to evolve, with ongoing research
-                  and development to expand our capabilities and improve healthcare outcomes globally.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ratione laboriosam, similique, quam ipsum voluptas neque optio rem molestias explicabo in cum, eligendi nesciunt impedit ea facilis fugiat et nulla illo ut quae veritatis. Vel veniam optio voluptate repudiandae quidem aut, sequi vitae, eius, possimus obcaecati praesentium ipsam dolores eligendi?
                 </p>
               </div>
             </div>
           </motion.div>
         </TabsContent>
-        <TabsContent value="values" className="mt-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <TabsContent value="values" className="mt-6 flex justify-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl w-full px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {values.map((value, index) => (
                 <Card

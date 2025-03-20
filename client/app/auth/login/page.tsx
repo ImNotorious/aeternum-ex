@@ -423,14 +423,14 @@ export default function LoginPage() {
                     </svg>
                     Google
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="outline"
                     className="border-primary/20 bg-primary/5 hover:bg-primary/10"
                     disabled={loading}
                   >
                     <Github className="mr-2 h-4 w-4" />
                     GitHub
-                  </Button>
+                  </Button> */}
                 </motion.div>
               </Tabs>
             </CardContent>
@@ -455,7 +455,7 @@ export default function LoginPage() {
           </Card>
         </motion.div>
 
-        {/* Hackathon badge */}
+        {/* Hackathon badge
         <motion.div
           className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full transform rotate-12 shadow-lg"
           initial={{ scale: 0, rotate: 45 }}
@@ -467,8 +467,8 @@ export default function LoginPage() {
             delay: 0.8,
           }}
         >
-          <span className="text-xs font-bold">Hackathon Winner 🏆</span>
-        </motion.div>
+          <span className="text-xs font-bold">Hackathon Winner 🏆</span> */}
+        {/* </motion.div> */}
       </motion.div>
     </div>
   )
