@@ -41,12 +41,9 @@ export default function DashboardPage() {
           <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Proceed to Dashboard</CardTitle>
-              <CardDescription>Please connect your wallet to access the dashboard</CardDescription>
+              <CardDescription>Continue to the main panel for access and control over your settings and data.</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="mb-4 text-sm text-muted-foreground">
-              Continue to the main panel for access and control over your settings and data.
-              </p>
               <GlowingButton onClick={handleConnect} className="w-full">
                 Proceed to Dashboard
               </GlowingButton>
