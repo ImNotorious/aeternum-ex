@@ -40,15 +40,15 @@ export default function DashboardPage() {
         >
           <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>Connect Wallet</CardTitle>
+              <CardTitle>Proceed to Dashboard</CardTitle>
               <CardDescription>Please connect your wallet to access the dashboard</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="mb-4 text-sm text-muted-foreground">
-                You need to connect your MetaMask or other Web3 wallet to access your medical dashboard.
+              Continue to the main panel for access and control over your settings and data.
               </p>
               <GlowingButton onClick={handleConnect} className="w-full">
-                Connect Wallet
+                Proceed to Dashboard
               </GlowingButton>
             </CardContent>
           </Card>
