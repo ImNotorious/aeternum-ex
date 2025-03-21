@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { GlowingButton } from "@/components/ui/glowing-button"
 import { Logo } from "@/components/logo"
-import { Mail, Lock, AlertCircle, Github, Brain, Shield, Zap, Clock, Users, Sparkles } from "lucide-react"
+import { Mail, Lock, AlertCircle, Brain, Shield, Zap, Clock, Users, Sparkles } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -69,7 +69,7 @@ export default function LoginPage() {
       await signUp(email, password)
       setShowSuccessAnimation(true)
       setTimeout(() => {
-        router.push("/dashboard")
+        router.push("/auth/signup-success")
       }, 1500)
     } catch (error: any) {
       setError(error.message || "Failed to sign up")
@@ -145,7 +145,7 @@ export default function LoginPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              Redirecting to dashboard...
+              {activeTab === "signup" ? "Redirecting to welcome page..." : "Redirecting to dashboard..."}
             </motion.p>
           </motion.div>
         </motion.div>
@@ -377,18 +377,21 @@ export default function LoginPage() {
                 </TabsContent>
 
                 <motion.div
-                  className="relative my-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                >
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-primary/10"></div>
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-                  </div>
-                </motion.div>
+  className="relative my-6"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.5, delay: 0.5 }}
+>
+  <div className="absolute inset-0 flex items-center">
+    <div className="w-full border-t border-primary/10"></div>
+  </div>
+  <div className="relative flex justify-center text-xs uppercase">
+    <span className="bg-background px-2 text-muted-foreground">
+      Or continue with
+    </span>
+  </div>
+</motion.div>
+
 
                 <motion.div
                   className="grid grid-cols-1 gap-4"
@@ -423,14 +426,6 @@ export default function LoginPage() {
                     </svg>
                     Google
                   </Button>
-                  {/* <Button
-                    variant="outline"
-                    className="border-primary/20 bg-primary/5 hover:bg-primary/10"
-                    disabled={loading}
-                  >
-                    <Github className="mr-2 h-4 w-4" />
-                    GitHub
-                  </Button> */}
                 </motion.div>
               </Tabs>
             </CardContent>
@@ -454,21 +449,6 @@ export default function LoginPage() {
             </CardFooter>
           </Card>
         </motion.div>
-
-        {/* Hackathon badge
-        <motion.div
-          className="absolute -top-4 -right-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full transform rotate-12 shadow-lg"
-          initial={{ scale: 0, rotate: 45 }}
-          animate={{ scale: 1, rotate: 12 }}
-          transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 15,
-            delay: 0.8,
-          }}
-        >
-          <span className="text-xs font-bold">Hackathon Winner 🏆</span> */}
-        {/* </motion.div> */}
       </motion.div>
     </div>
   )
