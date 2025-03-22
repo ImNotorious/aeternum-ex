@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load saved assets
-model = tf.keras.models.load_model('/Users/akshat/Documents/GitHub/aeternum-ex/server/model_1/heart_model.h5')
+model = tf.keras.models.load_model('server/model_2/main.py')
 
 with open('/Users/akshat/Documents/GitHub/aeternum-ex/server/model_1/label_encoders.pkl', 'rb') as f:
     metadata = pickle.load(f, encoding='latin1')
