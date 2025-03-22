@@ -35,12 +35,9 @@ export default function HeartDiseasePage() {
     hadDiabetes: "",
     difficultyWalking: "",
     smokerStatus: "",
-    chestScan: "",
     ageCategory: "",
     bmi: "",
     alcoholDrinkers: "",
-    hivTesting: "",
-    highRiskLastYear: "",
     covidPos: "",
   })
 
@@ -51,20 +48,36 @@ export default function HeartDiseasePage() {
     }))
   }
 
-  const handlePredict = (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
-    // Simulate API call
-    setTimeout(() => {
-      // Mock result - in a real app, this would come from your backend
+  const handlePredict = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    try {
+      const response = await fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
       setResult({
-        risk: "Moderate",
-        score: 65,
-      })
-      setLoading(false)
-    }, 3000)
-  }
+        risk: data.risk,
+        score: data.confidence,
+      });
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <div className="container px-4 md:px-6 py-12 md:py-24">
@@ -360,19 +373,6 @@ export default function HeartDiseasePage() {
                         <SelectItem value="1-5">1-5 teeth</SelectItem>
                         <SelectItem value="6+">6+ teeth</SelectItem>
                         <SelectItem value="all">All teeth</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="hivTesting">HIV Testing</Label>
-                    <Select onValueChange={(value) => handleChange("hivTesting", value)}>
-                      <SelectTrigger id="hivTesting" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
