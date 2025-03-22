@@ -13,16 +13,27 @@ import { GlowingButton } from "@/components/ui/glowing-button"
 import { LoadingAnimation } from "@/components/loading-animation"
 import { Upload, FileImage, AlertCircle, CheckCircle, Users } from "lucide-react"
 
+type PredictionResult = {
+  condition: string
+  confidence: number
+  additional_info?: string
+}
+
 export default function ChestDiseasePage() {
   const [image, setImage] = useState<string | null>(null)
   const [fileName, setFileName] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ condition: string; confidence: number } | null>(null)
+  const [result, setResult] = useState<PredictionResult | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'application/dicom']
+      if (!allowedTypes.includes(file.type)) {
+        alert('Invalid file type')
+        return
+      }
       setFileName(file.name)
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -33,19 +44,38 @@ export default function ChestDiseasePage() {
     }
   }
 
-  const handlePredict = () => {
-    if (!image) return
+  const handlePredict = async () => {
+    if (!image || !fileName) return
 
     setLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      // Mock result - in a real app, this would come from your backend
-      setResult({
-        condition: "Pneumonia",
-        confidence: 87.5,
+    try {
+      const formData = new FormData()
+      const blob = await fetch(image).then(res => res.blob())
+      formData.append('file', blob, fileName)
+
+      const response = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        body: formData
       })
+
+      if (!response.ok) throw new Error('Prediction failed')
+      
+      const data = await response.json()
+      setResult({
+        condition: data.condition,
+        confidence: data.confidence,
+        additional_info: data.additional_info
+      })
+    } catch (error) {
+      console.error('Prediction error:', error)
+      setResult({
+        condition: "Analysis Error",
+        confidence: 0,
+        additional_info: "An error occurred during analysis. Please try again."
+      })
+    } finally {
       setLoading(false)
-    }, 3000)
+    }
   }
 
   const triggerFileInput = () => {
@@ -110,7 +140,6 @@ export default function ChestDiseasePage() {
                   </div>
                 )}
               </div>
-
               {fileName && (
                 <div className="flex items-center justify-between bg-primary/5 p-3 rounded-lg">
                   <div className="flex items-center">
@@ -183,6 +212,11 @@ export default function ChestDiseasePage() {
                       </Badge>
                     </div>
                   </div>
+                  {result.additional_info && (
+                    <div className="mt-4 p-3 bg-accent/10 rounded-lg text-sm">
+                      <p className="text-muted-foreground">{result.additional_info}</p>
+                    </div>
+                  )}
                   <div className="bg-primary/5 p-4 rounded-lg max-w-md mx-auto">
                     <p className="text-sm text-muted-foreground">
                       <AlertCircle className="inline h-4 w-4 mr-1 text-primary" />
@@ -217,4 +251,3 @@ export default function ChestDiseasePage() {
     </div>
   )
 }
-

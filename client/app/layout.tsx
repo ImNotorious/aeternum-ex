@@ -16,9 +16,8 @@ const fontSans = FontSans({
 })
 
 export const metadata: Metadata = {
-  title: "Aeternum | Blockchain Medical Platform",
-  description: "Revolutionising Safe and Effective Medical Diagnosis using Machine Learning and Blockchain",
-  generator: "v0.dev",
+  title: "Aeternum | Medical Platform",
+  description: "Revolutionising Safe and Effective Medical Diagnosis using Machine Learning"
 }
 
 export default function RootLayout({
@@ -45,9 +44,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-import "./globals.css"
-
-
-
-import './globals.css'

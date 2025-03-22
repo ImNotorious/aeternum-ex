@@ -86,7 +86,7 @@ export default function AboutPage() {
           Our Mission & Vision
         </h1>
         <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-          Revolutionizing healthcare through the seamless integration of AI and blockchain technology
+          Revolutionizing healthcare through the seamless integration of AI and ML.
         </p>
       </motion.div>
 
@@ -125,7 +125,7 @@ export default function AboutPage() {
               <h2 className="text-2xl font-bold mb-4">Transforming Healthcare Through Technology</h2>
               <p className="text-muted-foreground mb-6">
                 At Aeternum, our mission is to revolutionize healthcare delivery by leveraging the power of artificial
-                intelligence and blockchain technology. We aim to create a secure, transparent, and efficient healthcare
+                intelligence & machine learning. We aim to create a secure, transparent, and efficient healthcare
                 ecosystem that empowers patients, supports healthcare providers, and improves medical outcomes globally.
               </p>
               <p className="text-muted-foreground">

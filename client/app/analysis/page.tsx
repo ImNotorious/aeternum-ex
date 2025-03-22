@@ -22,7 +22,7 @@ export default function AnalysisPage() {
           Medical Diagnosis
         </h1>
         <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-          Choose the type of analysis you want to perform using our advanced AI and blockchain technology
+          Choose the type of analysis you want to perform using our advanced AI
         </p>
       </motion.div>
 

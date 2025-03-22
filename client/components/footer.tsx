@@ -21,7 +21,7 @@ export default function Footer() {
           >
             <Logo />
             <p className="text-sm text-muted-foreground max-w-xs">
-              Revolutionising Safe and Effective Medical Diagnosis using Machine Learning and Blockchain
+              Revolutionising Safe and Effective Medical Diagnosis using Machine Learning
             </p>
             {/* <div className="flex gap-4">
               <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" asChild>

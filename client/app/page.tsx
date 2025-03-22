@@ -61,7 +61,7 @@ export default function Home() {
                     className="mb-2 px-3 py-1 text-sm bg-primary/10 text-primary border-primary/20"
                     variant="outline"
                   >
-                    AI-ML & Blockchain Powered
+                    AI-ML Powered
                   </Badge>
                 </motion.div>
                 <motion.h1
@@ -78,7 +78,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.4 }}
                 >
-                  Using Machine Learning and Blockchain for Early Disease Detection in Medical Images
+                  Using Machine Learning for Early Disease Detection in Medical Images
                 </motion.p>
               </div>
               <motion.div
@@ -246,7 +246,7 @@ export default function Home() {
               How It Works
             </h2>
             <p className="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">
-              Our blockchain-powered medical platform connects patients with doctors securely and efficiently
+              Our machine-learning medical platform connects patients with doctors securely and efficiently
             </p>
           </motion.div>
 

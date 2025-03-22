@@ -59,7 +59,7 @@ export default function DashboardMedicalRecords() {
         <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
           <CardHeader>
             <CardTitle>Your Medical Records</CardTitle>
-            <CardDescription>All records are encrypted and stored securely on the blockchain</CardDescription>
+            <CardDescription>All records are encrypted and stored securely </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
