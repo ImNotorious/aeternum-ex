@@ -52,20 +52,47 @@ export default function HeartDiseasePage() {
     e.preventDefault();
     setLoading(true);
   
+    const requestData = {
+      Sex: formData.sex,
+      GeneralHealth: formData.generalHealth,
+      PhysicalHealthDays: parseInt(formData.physicalHealthDays),
+      MentalHealthDays: parseInt(formData.mentalHealthDays),
+      LastCheckupTime: formData.lastCheckupTime,
+      PhysicalActivities: formData.physicalActivities,
+      SleepHours: parseInt(formData.sleepHours),
+      RemovedTeeth: formData.removedTeeth,
+      HadAngina: formData.hadAngina,
+      HadStroke: formData.hadStroke,
+      HadAsthma: formData.hadAsthma,
+      HadCOPD: formData.hadCOPD,
+      HadDepressiveDisorder: formData.hadDepressiveDisorder,
+      HadDiabetes: formData.hadDiabetes,
+      DifficultyWalking: formData.difficultyWalking,
+      SmokerStatus: formData.smokerStatus,
+      AgeCategory: formData.ageCategory,
+      BMI: parseFloat(formData.bmi),
+      AlcoholDrinkers: formData.alcoholDrinkers,
+      CovidPos: formData.covidPos,
+    };
+  
+    console.log('Request Data:', JSON.stringify(requestData, null, 2));
+  
     try {
       const response = await fetch('http://localhost:5000/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(requestData),
       });
   
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorText = await response.text();
+        throw new Error(`Network response was not ok: ${errorText}`);
       }
   
       const data = await response.json();
+      console.log('Response Data:', JSON.stringify(data, null, 2));
       setResult({
         risk: data.risk,
         score: data.confidence,
@@ -77,6 +104,11 @@ export default function HeartDiseasePage() {
       setLoading(false);
     }
   };
+  
+  
+  
+  
+  
   
 
   return (
@@ -121,9 +153,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="Female">Male</SelectItem>
+                        <SelectItem value="Male">Female</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -135,11 +166,11 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="veryGood">Very Good</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="fair">Fair</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
+                        <SelectItem value="Excellent">Excellent</SelectItem>
+                        <SelectItem value="Fair">Fair</SelectItem>
+                        <SelectItem value="Good">Good</SelectItem>
+                        <SelectItem value="Poor">Poor</SelectItem>
+                        <SelectItem value="Very good">Very good</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -173,11 +204,10 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="withinYear">Within past year</SelectItem>
-                        <SelectItem value="1-2years">1-2 years ago</SelectItem>
-                        <SelectItem value="2-5years">2-5 years ago</SelectItem>
-                        <SelectItem value="5+years">5+ years ago</SelectItem>
-                        <SelectItem value="never">Never</SelectItem>
+                        <SelectItem value="5 or more years ago">5 or more years ago</SelectItem>
+                        <SelectItem value="Within past 2 years (1 year but less than 2 years ago)">Within past 2 years (1 year but less than 2 years ago)</SelectItem>
+                        <SelectItem value="Within past 5 years (2 years but less than 5 years ago)">Within past 5 years (2 years but less than 5 years ago)</SelectItem>
+                        <SelectItem value="Within past year (anytime less than 12 months ago)">Within past year (anytime less than 12 months ago)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -211,12 +241,19 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="18-24">18-24</SelectItem>
-                        <SelectItem value="25-34">25-34</SelectItem>
-                        <SelectItem value="35-44">35-44</SelectItem>
-                        <SelectItem value="45-54">45-54</SelectItem>
-                        <SelectItem value="55-64">55-64</SelectItem>
-                        <SelectItem value="65+">65+</SelectItem>
+                        <SelectItem value="Age 18 to 24">Age 18 to 24</SelectItem>
+                        <SelectItem value="Age 25 to 29">Age 25 to 29</SelectItem>
+                        <SelectItem value="Age 30 to 34">Age 30 to 34</SelectItem>
+                        <SelectItem value="Age 35 to 39">Age 35 to 39</SelectItem>
+                        <SelectItem value="Age 40 to 44">Age 40 to 44</SelectItem>
+                        <SelectItem value="Age 45 to 49">Age 45 to 49</SelectItem>
+                        <SelectItem value="Age 50 to 54">Age 50 to 54</SelectItem>
+                        <SelectItem value="Age 55 to 59">Age 55 to 59</SelectItem>
+                        <SelectItem value="Age 60 to 64">Age 60 to 64</SelectItem>
+                        <SelectItem value="Age 65 to 69">Age 65 to 69</SelectItem>
+                        <SelectItem value="Age 70 to 74">Age 70 to 74</SelectItem>
+                        <SelectItem value="Age 75 to 79">Age 75 to 79</SelectItem>
+                        <SelectItem value="Age 80 or older">Age 80 or older</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -228,9 +265,10 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="current">Current smoker</SelectItem>
-                        <SelectItem value="former">Former smoker</SelectItem>
-                        <SelectItem value="never">Never smoked</SelectItem>
+                        <SelectItem value="Current smoker - now smokes every day">Current smoker - now smokes every day</SelectItem>
+                        <SelectItem value="Current smoker - now smokes some days">Current smoker - now smokes some days</SelectItem>
+                        <SelectItem value="Former smoker">Former smoker</SelectItem>
+                        <SelectItem value="Never smoked">Never smoked</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -242,10 +280,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="heavy">Heavy drinker</SelectItem>
-                        <SelectItem value="moderate">Moderate drinker</SelectItem>
-                        <SelectItem value="light">Light drinker</SelectItem>
-                        <SelectItem value="none">Non-drinker</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -257,10 +293,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="active">Active (150+ min/week)</SelectItem>
-                        <SelectItem value="moderate">Moderate (75-150 min/week)</SelectItem>
-                        <SelectItem value="light\">Light (75 min/week)</SelectItem>
-                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -274,8 +308,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -287,8 +321,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -300,8 +334,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -313,8 +347,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -326,8 +360,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -339,8 +373,10 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="No, pre-diabetes or borderline diabetes">No, pre-diabetes or borderline diabetes</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="Yes, but only during pregnancy (female)">Yes, but only during pregnancy (female)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -354,10 +390,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">No difficulty</SelectItem>
-                        <SelectItem value="slight">Slight difficulty</SelectItem>
-                        <SelectItem value="moderate">Moderate difficulty</SelectItem>
-                        <SelectItem value="severe">Severe difficulty</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -369,10 +403,10 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">None</SelectItem>
-                        <SelectItem value="1-5">1-5 teeth</SelectItem>
-                        <SelectItem value="6+">6+ teeth</SelectItem>
-                        <SelectItem value="all">All teeth</SelectItem>
+                        <SelectItem value="1 to 5">1 to 5</SelectItem>
+                        <SelectItem value="6 or more, but not all">6 or more, but not all</SelectItem>
+                        <SelectItem value="All">All</SelectItem>
+                        <SelectItem value="None of them">None of them</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -384,9 +418,9 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="positive">Positive (Current/Past)</SelectItem>
-                        <SelectItem value="negative">Negative</SelectItem>
-                        <SelectItem value="unknown">Unknown</SelectItem>
+                        <SelectItem value="No">No</SelectItem>
+                        <SelectItem value="Tested positive using home test without a health professional">Tested positive using home test without a health professional</SelectItem>
+                        <SelectItem value="Yes">Yes</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
