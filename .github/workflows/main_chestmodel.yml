@@ -68,4 +68,4 @@ jobs:
         with:
           app-name: 'chestModel'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_35956003A70743ABB7B58C8E80242D5B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
