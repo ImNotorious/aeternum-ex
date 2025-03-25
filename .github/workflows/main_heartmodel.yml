@@ -22,8 +22,8 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv ../server/model_1/venv
-          source ../server/model_1/venv/bin/activate
+          python -m venv server/model_1/venv
+          source server/model_1/venv/bin/activate
 
       - name: Install dependencies
         run: pip install -r ../server/model_1/requirements.txt
