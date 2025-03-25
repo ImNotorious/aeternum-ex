@@ -26,7 +26,7 @@ jobs:
           source server/model_1/venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r ../server/model_1/requirements.txt
+        run: pip install -r server/model_1/requirements.txt
 
       # Optional: Add step to run tests here
 
