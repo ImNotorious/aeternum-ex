@@ -26,20 +26,20 @@ jobs:
           source server/model_1/venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r server/model_1/requirements.txt
+        run: |
+          source server/model_1/venv/bin/activate
+          pip install -r server/model_1/requirements.txt
 
       # Optional: Add step to run tests here
 
       - name: Zip artifact for deployment
-        run: |
-          cd ../server/model_1
-          zip -r ../../release.zip ./*
+        run: zip -r release.zip server/model_1
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: ../../release.zip
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,4 +64,4 @@ jobs:
           app-name: 'heartModel'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: .
+          package: server/model_1
