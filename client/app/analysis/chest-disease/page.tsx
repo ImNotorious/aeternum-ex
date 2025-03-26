@@ -29,9 +29,9 @@ export default function ChestDiseasePage() {
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'application/dicom']
+      const allowedTypes = ["image/jpeg", "image/png", "application/dicom"]
       if (!allowedTypes.includes(file.type)) {
-        alert('Invalid file type')
+        alert("Invalid file type")
         return
       }
       setFileName(file.name)
@@ -50,28 +50,28 @@ export default function ChestDiseasePage() {
     setLoading(true)
     try {
       const formData = new FormData()
-      const blob = await fetch(image).then(res => res.blob())
-      formData.append('file', blob, fileName)
+      const blob = await fetch(image).then((res) => res.blob())
+      formData.append("file", blob, fileName)
 
-      const response = await fetch('http://localhost:8000/predict', {
-        method: 'POST',
-        body: formData
+      const response = await fetch("http://localhost:8000/predict", {
+        method: "POST",
+        body: formData,
       })
 
-      if (!response.ok) throw new Error('Prediction failed')
-      
+      if (!response.ok) throw new Error("Prediction failed")
+
       const data = await response.json()
       setResult({
         condition: data.condition,
         confidence: data.confidence,
-        additional_info: data.additional_info
+        additional_info: data.additional_info,
       })
     } catch (error) {
-      console.error('Prediction error:', error)
+      console.error("Prediction error:", error)
       setResult({
         condition: "Analysis Error",
         confidence: 0,
-        additional_info: "An error occurred during analysis. Please try again."
+        additional_info: "An error occurred during analysis. Please try again.",
       })
     } finally {
       setLoading(false)
@@ -251,3 +251,4 @@ export default function ChestDiseasePage() {
     </div>
   )
 }
+

@@ -13,22 +13,22 @@ export default function AboutPage() {
   const team = [
     {
       name: "Akshat Jain",
-      
+
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
       name: "Amulya Tripathi",
-      
+
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
       name: "Aryan Sethi",
-      
+
       avatar: "/placeholder.svg?height=100&width=100",
     },
     {
       name: "Suman Sharma",
-      
+
       avatar: "/placeholder.svg?height=100&width=100",
     },
   ]
@@ -91,29 +91,29 @@ export default function AboutPage() {
       </motion.div>
 
       <Tabs defaultValue="mission" className="mb-16">
-      <div className="flex justify-center">
-        <TabsList className="bg-primary/10 p-1 mx-auto">
-          <TabsTrigger
-            value="mission"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            Our Mission
-          </TabsTrigger>
-          <TabsTrigger
-            value="story"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            Our Story
-          </TabsTrigger>
-          <TabsTrigger
-            value="values"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-          >
-            Our Values
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex justify-center">
+          <TabsList className="bg-primary/10 p-1 mx-auto">
+            <TabsTrigger
+              value="mission"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Our Mission
+            </TabsTrigger>
+            <TabsTrigger
+              value="story"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Our Story
+            </TabsTrigger>
+            <TabsTrigger
+              value="values"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
+              Our Values
+            </TabsTrigger>
+          </TabsList>
         </div>
-        
+
         <TabsContent value="mission" className="mt-6 flex justify-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -161,7 +161,10 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2019: The Beginning</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. In modi totam cum, sunt rem est fugit itaque tempora odio reiciendis numquam, molestiae officia? Dicta alias possimus explicabo corporis iusto facere temporibus quo ipsa sit. Animi, minima aliquam pariatur voluptate quis est placeat temporibus iure tempora quam veniam explicabo hic quisquam.
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. In modi totam cum, sunt rem est fugit itaque
+                  tempora odio reiciendis numquam, molestiae officia? Dicta alias possimus explicabo corporis iusto
+                  facere temporibus quo ipsa sit. Animi, minima aliquam pariatur voluptate quis est placeat temporibus
+                  iure tempora quam veniam explicabo hic quisquam.
                 </p>
               </div>
 
@@ -169,7 +172,10 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2020: Research & Development</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi delectus, quae esse nulla dolorum obcaecati architecto. Nisi minus officia dolore rerum soluta. Quam, tempore neque aperiam optio aliquid quo consequatur animi beatae facilis? Non qui a, distinctio voluptatibus blanditiis ipsum nisi modi iure error et porro omnis minima accusamus sint?
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi delectus, quae esse nulla dolorum
+                  obcaecati architecto. Nisi minus officia dolore rerum soluta. Quam, tempore neque aperiam optio
+                  aliquid quo consequatur animi beatae facilis? Non qui a, distinctio voluptatibus blanditiis ipsum nisi
+                  modi iure error et porro omnis minima accusamus sint?
                 </p>
               </div>
 
@@ -177,7 +183,10 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2021: Beta Launch</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti repellat molestiae esse iusto enim fugit obcaecati minus asperiores iure? Distinctio, modi numquam? Corporis ipsa laborum exercitationem maxime alias commodi placeat quos voluptatibus sint! Quo natus, eos tempora voluptate hic nisi, consequuntur nostrum, fugit omnis error odio nesciunt amet odit nam!
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Deleniti repellat molestiae esse iusto enim
+                  fugit obcaecati minus asperiores iure? Distinctio, modi numquam? Corporis ipsa laborum exercitationem
+                  maxime alias commodi placeat quos voluptatibus sint! Quo natus, eos tempora voluptate hic nisi,
+                  consequuntur nostrum, fugit omnis error odio nesciunt amet odit nam!
                 </p>
               </div>
 
@@ -185,7 +194,10 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">2022: Global Expansion</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere id error dicta corporis repellat dolore expedita molestias assumenda at debitis dolores in ipsa repudiandae quos explicabo libero, nemo saepe. Exercitationem repellat quaerat nemo, vero rem odit. Blanditiis deserunt, consequuntur, dolor officiis et est natus quaerat, ipsa deleniti ut perferendis doloribus!
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere id error dicta corporis repellat
+                  dolore expedita molestias assumenda at debitis dolores in ipsa repudiandae quos explicabo libero, nemo
+                  saepe. Exercitationem repellat quaerat nemo, vero rem odit. Blanditiis deserunt, consequuntur, dolor
+                  officiis et est natus quaerat, ipsa deleniti ut perferendis doloribus!
                 </p>
               </div>
 
@@ -193,14 +205,22 @@ export default function AboutPage() {
                 <div className="absolute left-[-8px] top-0 h-4 w-4 rounded-full bg-primary"></div>
                 <h3 className="text-xl font-bold mb-2">Today: Leading the Revolution</h3>
                 <p className="text-muted-foreground">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ratione laboriosam, similique, quam ipsum voluptas neque optio rem molestias explicabo in cum, eligendi nesciunt impedit ea facilis fugiat et nulla illo ut quae veritatis. Vel veniam optio voluptate repudiandae quidem aut, sequi vitae, eius, possimus obcaecati praesentium ipsam dolores eligendi?
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis ratione laboriosam, similique,
+                  quam ipsum voluptas neque optio rem molestias explicabo in cum, eligendi nesciunt impedit ea facilis
+                  fugiat et nulla illo ut quae veritatis. Vel veniam optio voluptate repudiandae quidem aut, sequi
+                  vitae, eius, possimus obcaecati praesentium ipsam dolores eligendi?
                 </p>
               </div>
             </div>
           </motion.div>
         </TabsContent>
         <TabsContent value="values" className="mt-6 flex justify-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-3xl w-full px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-3xl w-full px-4"
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {values.map((value, index) => (
                 <Card

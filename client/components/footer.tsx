@@ -3,9 +3,6 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Logo } from "@/components/logo"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Facebook, Twitter, Instagram, Linkedin, Github } from "lucide-react"
 
 export default function Footer() {
   return (

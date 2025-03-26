@@ -49,67 +49,34 @@ export default function HeartDiseasePage() {
   }
 
   const handlePredict = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-  
-    const requestData = {
-      Sex: formData.sex,
-      GeneralHealth: formData.generalHealth,
-      PhysicalHealthDays: parseInt(formData.physicalHealthDays),
-      MentalHealthDays: parseInt(formData.mentalHealthDays),
-      LastCheckupTime: formData.lastCheckupTime,
-      PhysicalActivities: formData.physicalActivities,
-      SleepHours: parseInt(formData.sleepHours),
-      RemovedTeeth: formData.removedTeeth,
-      HadAngina: formData.hadAngina,
-      HadStroke: formData.hadStroke,
-      HadAsthma: formData.hadAsthma,
-      HadCOPD: formData.hadCOPD,
-      HadDepressiveDisorder: formData.hadDepressiveDisorder,
-      HadDiabetes: formData.hadDiabetes,
-      DifficultyWalking: formData.difficultyWalking,
-      SmokerStatus: formData.smokerStatus,
-      AgeCategory: formData.ageCategory,
-      BMI: parseFloat(formData.bmi),
-      AlcoholDrinkers: formData.alcoholDrinkers,
-      CovidPos: formData.covidPos,
-    };
-  
-    console.log('Request Data:', JSON.stringify(requestData, null, 2));
-  
+    e.preventDefault()
+    setLoading(true)
+
     try {
-      const response = await fetch('heartmodel-bpbuc9axcxhnftac.centralindia-01.azurewebsites.net/predict', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/predict", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
-      });
-  
+        body: JSON.stringify(formData),
+      })
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Network response was not ok: ${errorText}`);
+        throw new Error("Network response was not ok")
       }
-  
-      const data = await response.json();
-      console.log('Response Data:', JSON.stringify(data, null, 2));
+
+      const data = await response.json()
       setResult({
         risk: data.risk,
         score: data.confidence,
-      });
+      })
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error)
       // Handle error (e.g., show error message to user)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-  
-  
-  
-  
-  
-  
+  }
 
   return (
     <div className="container px-4 md:px-6 py-12 md:py-24">
@@ -153,8 +120,9 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Female">Male</SelectItem>
-                        <SelectItem value="Male">Female</SelectItem>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -162,25 +130,28 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="generalHealth">General Health</Label>
                     <Select onValueChange={(value) => handleChange("generalHealth", value)}>
-                      <SelectTrigger id="generalHealth" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="generalHealth"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Excellent">Excellent</SelectItem>
-                        <SelectItem value="Fair">Fair</SelectItem>
-                        <SelectItem value="Good">Good</SelectItem>
-                        <SelectItem value="Poor">Poor</SelectItem>
-                        <SelectItem value="Very good">Very good</SelectItem>
+                        <SelectItem value="excellent">Excellent</SelectItem>
+                        <SelectItem value="veryGood">Very Good</SelectItem>
+                        <SelectItem value="good">Good</SelectItem>
+                        <SelectItem value="fair">Fair</SelectItem>
+                        <SelectItem value="poor">Poor</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="physicalHealthDays">Physical Health Days</Label>
-                    <Input 
-                      id="physicalHealthDays" 
-                      type="number" 
-                      placeholder="Days per month" 
+                    <Input
+                      id="physicalHealthDays"
+                      type="number"
+                      placeholder="Days per month"
                       className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
                       onChange={(e) => handleChange("physicalHealthDays", e.target.value)}
                     />
@@ -188,10 +159,10 @@ export default function HeartDiseasePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="mentalHealthDays">Mental Health Days</Label>
-                    <Input 
-                      id="mentalHealthDays" 
-                      type="number" 
-                      placeholder="Days per month" 
+                    <Input
+                      id="mentalHealthDays"
+                      type="number"
+                      placeholder="Days per month"
                       className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
                       onChange={(e) => handleChange("mentalHealthDays", e.target.value)}
                     />
@@ -200,24 +171,28 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="lastCheckupTime">Last Checkup Time</Label>
                     <Select onValueChange={(value) => handleChange("lastCheckupTime", value)}>
-                      <SelectTrigger id="lastCheckupTime" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="lastCheckupTime"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="5 or more years ago">5 or more years ago</SelectItem>
-                        <SelectItem value="Within past 2 years (1 year but less than 2 years ago)">Within past 2 years (1 year but less than 2 years ago)</SelectItem>
-                        <SelectItem value="Within past 5 years (2 years but less than 5 years ago)">Within past 5 years (2 years but less than 5 years ago)</SelectItem>
-                        <SelectItem value="Within past year (anytime less than 12 months ago)">Within past year (anytime less than 12 months ago)</SelectItem>
+                        <SelectItem value="withinYear">Within past year</SelectItem>
+                        <SelectItem value="1-2years">1-2 years ago</SelectItem>
+                        <SelectItem value="2-5years">2-5 years ago</SelectItem>
+                        <SelectItem value="5+years">5+ years ago</SelectItem>
+                        <SelectItem value="never">Never</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="sleepHours">Sleep Hours</Label>
-                    <Input 
-                      id="sleepHours" 
-                      type="number" 
-                      placeholder="Hours per day" 
+                    <Input
+                      id="sleepHours"
+                      type="number"
+                      placeholder="Hours per day"
                       className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
                       onChange={(e) => handleChange("sleepHours", e.target.value)}
                     />
@@ -225,10 +200,10 @@ export default function HeartDiseasePage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="bmi">BMI (Weight Index)</Label>
-                    <Input 
-                      id="bmi" 
-                      type="number" 
-                      placeholder="BMI value" 
+                    <Input
+                      id="bmi"
+                      type="number"
+                      placeholder="BMI value"
                       className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
                       onChange={(e) => handleChange("bmi", e.target.value)}
                     />
@@ -237,23 +212,19 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="ageCategory">Age Category</Label>
                     <Select onValueChange={(value) => handleChange("ageCategory", value)}>
-                      <SelectTrigger id="ageCategory" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="ageCategory"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Age 18 to 24">Age 18 to 24</SelectItem>
-                        <SelectItem value="Age 25 to 29">Age 25 to 29</SelectItem>
-                        <SelectItem value="Age 30 to 34">Age 30 to 34</SelectItem>
-                        <SelectItem value="Age 35 to 39">Age 35 to 39</SelectItem>
-                        <SelectItem value="Age 40 to 44">Age 40 to 44</SelectItem>
-                        <SelectItem value="Age 45 to 49">Age 45 to 49</SelectItem>
-                        <SelectItem value="Age 50 to 54">Age 50 to 54</SelectItem>
-                        <SelectItem value="Age 55 to 59">Age 55 to 59</SelectItem>
-                        <SelectItem value="Age 60 to 64">Age 60 to 64</SelectItem>
-                        <SelectItem value="Age 65 to 69">Age 65 to 69</SelectItem>
-                        <SelectItem value="Age 70 to 74">Age 70 to 74</SelectItem>
-                        <SelectItem value="Age 75 to 79">Age 75 to 79</SelectItem>
-                        <SelectItem value="Age 80 or older">Age 80 or older</SelectItem>
+                        <SelectItem value="18-24">18-24</SelectItem>
+                        <SelectItem value="25-34">25-34</SelectItem>
+                        <SelectItem value="35-44">35-44</SelectItem>
+                        <SelectItem value="45-54">45-54</SelectItem>
+                        <SelectItem value="55-64">55-64</SelectItem>
+                        <SelectItem value="65+">65+</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -261,14 +232,16 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="smokerStatus">Smoker Status</Label>
                     <Select onValueChange={(value) => handleChange("smokerStatus", value)}>
-                      <SelectTrigger id="smokerStatus" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="smokerStatus"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Current smoker - now smokes every day">Current smoker - now smokes every day</SelectItem>
-                        <SelectItem value="Current smoker - now smokes some days">Current smoker - now smokes some days</SelectItem>
-                        <SelectItem value="Former smoker">Former smoker</SelectItem>
-                        <SelectItem value="Never smoked">Never smoked</SelectItem>
+                        <SelectItem value="current">Current smoker</SelectItem>
+                        <SelectItem value="former">Former smoker</SelectItem>
+                        <SelectItem value="never">Never smoked</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -276,12 +249,17 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="alcoholDrinkers">Alcohol Consumption</Label>
                     <Select onValueChange={(value) => handleChange("alcoholDrinkers", value)}>
-                      <SelectTrigger id="alcoholDrinkers" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="alcoholDrinkers"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="heavy">Heavy drinker</SelectItem>
+                        <SelectItem value="moderate">Moderate drinker</SelectItem>
+                        <SelectItem value="light">Light drinker</SelectItem>
+                        <SelectItem value="none">Non-drinker</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -289,12 +267,17 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="physicalActivities">Physical Activities</Label>
                     <Select onValueChange={(value) => handleChange("physicalActivities", value)}>
-                      <SelectTrigger id="physicalActivities" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="physicalActivities"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="active">Active (150+ min/week)</SelectItem>
+                        <SelectItem value="moderate">Moderate (75-150 min/week)</SelectItem>
+                        <SelectItem value="light\">Light (75 min/week)</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -304,12 +287,15 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="hadAngina">Had Angina</Label>
                     <Select onValueChange={(value) => handleChange("hadAngina", value)}>
-                      <SelectTrigger id="hadAngina" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="hadAngina"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -317,12 +303,15 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="hadStroke">Had Stroke</Label>
                     <Select onValueChange={(value) => handleChange("hadStroke", value)}>
-                      <SelectTrigger id="hadStroke" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="hadStroke"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -330,12 +319,15 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="hadAsthma">Had Asthma</Label>
                     <Select onValueChange={(value) => handleChange("hadAsthma", value)}>
-                      <SelectTrigger id="hadAsthma" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="hadAsthma"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -347,8 +339,8 @@ export default function HeartDiseasePage() {
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -356,12 +348,15 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="hadDepressiveDisorder">Had Depressive Disorder</Label>
                     <Select onValueChange={(value) => handleChange("hadDepressiveDisorder", value)}>
-                      <SelectTrigger id="hadDepressiveDisorder" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="hadDepressiveDisorder"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -369,14 +364,15 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="hadDiabetes">Had Diabetes</Label>
                     <Select onValueChange={(value) => handleChange("hadDiabetes", value)}>
-                      <SelectTrigger id="hadDiabetes" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="hadDiabetes"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="No, pre-diabetes or borderline diabetes">No, pre-diabetes or borderline diabetes</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
-                        <SelectItem value="Yes, but only during pregnancy (female)">Yes, but only during pregnancy (female)</SelectItem>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -386,12 +382,17 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="difficultyWalking">Difficulty Walking</Label>
                     <Select onValueChange={(value) => handleChange("difficultyWalking", value)}>
-                      <SelectTrigger id="difficultyWalking" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="difficultyWalking"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="none">No difficulty</SelectItem>
+                        <SelectItem value="slight">Slight difficulty</SelectItem>
+                        <SelectItem value="moderate">Moderate difficulty</SelectItem>
+                        <SelectItem value="severe">Severe difficulty</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -399,14 +400,17 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="removedTeeth">Removed Teeth</Label>
                     <Select onValueChange={(value) => handleChange("removedTeeth", value)}>
-                      <SelectTrigger id="removedTeeth" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="removedTeeth"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="1 to 5">1 to 5</SelectItem>
-                        <SelectItem value="6 or more, but not all">6 or more, but not all</SelectItem>
-                        <SelectItem value="All">All</SelectItem>
-                        <SelectItem value="None of them">None of them</SelectItem>
+                        <SelectItem value="none">None</SelectItem>
+                        <SelectItem value="1-5">1-5 teeth</SelectItem>
+                        <SelectItem value="6+">6+ teeth</SelectItem>
+                        <SelectItem value="all">All teeth</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -414,13 +418,16 @@ export default function HeartDiseasePage() {
                   <div className="space-y-2">
                     <Label htmlFor="covidPos">COVID-19 Status</Label>
                     <Select onValueChange={(value) => handleChange("covidPos", value)}>
-                      <SelectTrigger id="covidPos" className="border-primary/20 bg-primary/5 focus-visible:ring-primary">
+                      <SelectTrigger
+                        id="covidPos"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="No">No</SelectItem>
-                        <SelectItem value="Tested positive using home test without a health professional">Tested positive using home test without a health professional</SelectItem>
-                        <SelectItem value="Yes">Yes</SelectItem>
+                        <SelectItem value="positive">Positive (Current/Past)</SelectItem>
+                        <SelectItem value="negative">Negative</SelectItem>
+                        <SelectItem value="unknown">Unknown</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -433,10 +440,7 @@ export default function HeartDiseasePage() {
                   </GlowingButton>
 
                   <Link href="/doctors" className="w-full">
-                    <Button
-                      variant="outline"
-                      className="w-full border-primary/20 bg-primary/5 hover:bg-primary/10"
-                    >
+                    <Button variant="outline" className="w-full border-primary/20 bg-primary/5 hover:bg-primary/10">
                       <Users className="mr-2 h-4 w-4" />
                       Connect with a Doctor
                     </Button>

@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/auth-context"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { GlobalParticles } from "@/components/global-particles"
+import { Toaster } from "@/components/toaster"
 import { cn } from "@/lib/utils"
 
 const fontSans = FontSans({
@@ -17,7 +18,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Aeternum | Medical Platform",
-  description: "Revolutionising Safe and Effective Medical Diagnosis using Machine Learning"
+  description: "Revolutionising Safe and Effective Medical Diagnosis using Machine Learning",
 }
 
 export default function RootLayout({
@@ -36,6 +37,7 @@ export default function RootLayout({
                 <Header />
                 <main className="flex-1">{children}</main>
                 <Footer />
+                <Toaster />
               </div>
             </Web3Provider>
           </AuthProvider>
@@ -44,3 +46,4 @@ export default function RootLayout({
     </html>
   )
 }
+

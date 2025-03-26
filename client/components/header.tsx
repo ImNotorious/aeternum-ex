@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useWeb3 } from "@/hooks/use-web3"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
-import { Menu, Sun, Moon, LogIn, LogOut, User } from "lucide-react"
+import { Menu, LogIn, LogOut, User } from "lucide-react"
 import { Logo } from "@/components/logo"
 
 export default function Header() {

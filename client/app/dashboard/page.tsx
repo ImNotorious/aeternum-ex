@@ -4,10 +4,8 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { useWeb3 } from "@/hooks/use-web3"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Calendar, FileText, Wallet } from "lucide-react"
 import DashboardAppointments from "@/components/dashboard/appointments"
 import DashboardPayments from "@/components/dashboard/payments"
 import DashboardMedicalRecords from "@/components/dashboard/medical-records"
@@ -41,7 +39,9 @@ export default function DashboardPage() {
           <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Proceed to Dashboard</CardTitle>
-              <CardDescription>Continue to the main panel for access and control over your settings and data.</CardDescription>
+              <CardDescription>
+                Continue to the main panel for access and control over your settings and data.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <GlowingButton onClick={handleConnect} className="w-full">
@@ -90,3 +90,4 @@ export default function DashboardPage() {
     </div>
   )
 }
+

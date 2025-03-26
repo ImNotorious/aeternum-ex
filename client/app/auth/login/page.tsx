@@ -377,21 +377,18 @@ export default function LoginPage() {
                 </TabsContent>
 
                 <motion.div
-  className="relative my-6"
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.5 }}
->
-  <div className="absolute inset-0 flex items-center">
-    <div className="w-full border-t border-primary/10"></div>
-  </div>
-  <div className="relative flex justify-center text-xs uppercase">
-    <span className="bg-background px-2 text-muted-foreground">
-      Or continue with
-    </span>
-  </div>
-</motion.div>
-
+                  className="relative my-6"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-primary/10"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                  </div>
+                </motion.div>
 
                 <motion.div
                   className="grid grid-cols-1 gap-4"
