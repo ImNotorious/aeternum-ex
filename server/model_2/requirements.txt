@@ -3,5 +3,4 @@ flask
 tensorflow
 numpy
 pandas
-pickle
 flask-cors
