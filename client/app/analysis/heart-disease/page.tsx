@@ -78,7 +78,7 @@ export default function HeartDiseasePage() {
     console.log('Request Data:', JSON.stringify(requestData, null, 2));
   
     try {
-      const response = await fetch('http://localhost:5000/predict', {
+      const response = await fetch('https://heart-ml-api-bkl0.onrender.com/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
