@@ -105,12 +105,6 @@ export default function HeartDiseasePage() {
     }
   };
   
-  
-  
-  
-  
-  
-
   return (
     <div className="container px-4 md:px-6 py-12 md:py-24">
       <motion.div
