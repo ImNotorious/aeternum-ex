@@ -53,7 +53,7 @@ export default function ChestDiseasePage() {
       const blob = await fetch(image).then((res) => res.blob())
       formData.append("file", blob, fileName)
 
-      const response = await fetch("https://chest-ml-api.onrender.com/predict", {
+      const response = await fetch("http://localhost:8000/predict", {
         method: "POST",
         body: formData,
       })

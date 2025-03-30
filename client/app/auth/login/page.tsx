@@ -46,7 +46,7 @@ export default function LoginPage() {
       await signIn(email, password)
       setShowSuccessAnimation(true)
       setTimeout(() => {
-        router.push("/dashboard")
+        router.push("/patient-dashboard")
       }, 1500)
     } catch (error: any) {
       setError(error.message || "Failed to sign in")
@@ -85,7 +85,7 @@ export default function LoginPage() {
       await signInWithGoogle()
       setShowSuccessAnimation(true)
       setTimeout(() => {
-        router.push("/dashboard")
+        router.push("/patient-dashboard")
       }, 1500)
     } catch (error: any) {
       setError(error.message || "Failed to sign in with Google")
@@ -211,9 +211,9 @@ export default function LoginPage() {
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <CardTitle className="text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-                  Welcome to Aeternum
+                  Patient Portal
                 </CardTitle>
-                <CardDescription className="text-center">Sign in to access the future of healthcare</CardDescription>
+                <CardDescription className="text-center">Sign in to access your healthcare services</CardDescription>
               </motion.div>
             </CardHeader>
             <CardContent>
@@ -260,7 +260,7 @@ export default function LoginPage() {
                         <Input
                           id="email"
                           type="email"
-                          placeholder="m@example.com"
+                          placeholder="patient@example.com"
                           className="pl-10 border-primary/20 bg-primary/5 focus-visible:ring-primary"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -318,7 +318,7 @@ export default function LoginPage() {
                         <Input
                           id="signup-email"
                           type="email"
-                          placeholder="m@example.com"
+                          placeholder="patient@example.com"
                           className="pl-10 border-primary/20 bg-primary/5 focus-visible:ring-primary"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -370,7 +370,7 @@ export default function LoginPage() {
                       transition={{ duration: 0.3, delay: 0.4 }}
                     >
                       <GlowingButton type="submit" className="w-full" disabled={loading}>
-                        {loading ? "Creating account..." : "Create Account"}
+                        {loading ? "Creating account..." : "Create Patient Account"}
                       </GlowingButton>
                     </motion.div>
                   </form>
@@ -425,6 +425,20 @@ export default function LoginPage() {
                   </Button>
                 </motion.div>
               </Tabs>
+
+              <motion.div
+                className="mt-6 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+              >
+                <p className="text-sm text-muted-foreground">
+                  Are you hospital staff?{" "}
+                  <Link href="/auth/hospital-login" className="text-primary hover:underline">
+                    Hospital Login
+                  </Link>
+                </p>
+              </motion.div>
             </CardContent>
             <CardFooter className="flex flex-col items-center gap-2">
               <motion.p

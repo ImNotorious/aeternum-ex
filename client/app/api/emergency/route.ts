@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     }
 
     const client = await clientPromise
-    const db = client.db("hospital")
+    const db = client.db("aeternum")
 
     // Find available ambulance
     const availableAmbulance = await db
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         { returnDocument: "after" },
       )
 
-    if (!availableAmbulance) {
+    if (!availableAmbulance.value) {
       // Create emergency request but mark as pending
       const emergencyCall = {
         ...data,
@@ -93,12 +93,17 @@ export async function GET(request: Request) {
     const status = searchParams.get("status")
 
     const client = await clientPromise
-    const db = client.db("hospital")
+    const db = client.db("aeternum")
 
     let query = {}
 
     if (status) {
       query = { status }
+    }
+
+    // If user is not admin or hospital staff, only show their own emergency calls
+    if (session.user.role !== "admin" && session.user.role !== "hospital") {
+      query = { ...query, userId: session.user.id }
     }
 
     const emergencyCalls = await db.collection("emergencyCalls").find(query).sort({ createdAt: -1 }).toArray()
