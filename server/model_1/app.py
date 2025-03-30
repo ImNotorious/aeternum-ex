@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load model and assets using pickle
-with open('heart_attack_model.pkl', 'rb') as model_file:
+with open('heart_model.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
 with open('label_encoders.pkl', 'rb') as f:
