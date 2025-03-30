@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import tensorflow as tf
 import os
 import pandas as pd
 import pickle
@@ -9,8 +8,9 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Load saved assets
-model = tf.keras.models.load_model('heart_model.h5')
+# Load model and assets using pickle
+with open('heart_attack_model.pkl', 'rb') as model_file:
+    model = pickle.load(model_file)
 
 with open('label_encoders.pkl', 'rb') as f:
     metadata = pickle.load(f, encoding='latin1')
@@ -22,6 +22,7 @@ def predict_heart_disease():
     data = request.json
     inputs = {}
 
+    # Validation and encoding logic remains identical
     for feature in feature_order:
         if feature in encoders:
             encoder = encoders[feature]
