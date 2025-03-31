@@ -1,166 +1,161 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
+import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Search, MapPin, Clock, CheckCircle, AlertTriangle } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { GlowingButton } from "@/components/ui/glowing-button"
 import { useToast } from "@/hooks/use-toast"
+import { Ambulance, MapPin, Phone, AlertTriangle, Clock, CheckCircle } from "lucide-react"
 
-export default function AdminEmergencyPage() {
+// Import map component dynamically to avoid SSR issues with Leaflet
+const MapComponent = dynamic(() => import("@/components/map-component"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[300px] w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+      <p className="text-sm text-muted-foreground">Loading map...</p>
+    </div>
+  ),
+})
+
+export default function EmergencyRequestPage() {
+  const router = useRouter()
   const { toast } = useToast()
-  const [searchQuery, setSearchQuery] = useState("")
-
-  // Mock emergency calls data
-  const [emergencyCalls, setEmergencyCalls] = useState([
-    {
-      id: "CALL-2001",
-      patientName: "Ananya Reddy",
-      contactNumber: "+91 98765 43210",
-      location: "Connaught Place, New Delhi",
-      emergencyType: "Cardiac",
-      status: "dispatched",
-      ambulanceId: "AMB-1002",
-      timestamp: "2023-05-15T10:15:00",
-    },
-    {
-      id: "CALL-2002",
-      patientName: "Ravi Malhotra",
-      contactNumber: "+91 87654 32109",
-      location: "Lajpat Nagar, New Delhi",
-      emergencyType: "Accident",
-      status: "completed",
-      ambulanceId: "AMB-1005",
-      timestamp: "2023-05-15T09:30:00",
-    },
-    {
-      id: "CALL-2003",
-      patientName: "Sanjay Kapoor",
-      contactNumber: "+91 76543 21098",
-      location: "Rohini, New Delhi",
-      emergencyType: "Respiratory",
-      status: "in_progress",
-      ambulanceId: "AMB-1002",
-      timestamp: "2023-05-15T11:45:00",
-    },
-    {
-      id: "CALL-2004",
-      patientName: "Meera Verma",
-      contactNumber: "+91 65432 10987",
-      location: "Dwarka, New Delhi",
-      emergencyType: "Stroke",
-      status: "pending",
-      ambulanceId: null,
-      timestamp: "2023-05-15T12:30:00",
-    },
-    {
-      id: "CALL-2005",
-      patientName: "Arjun Singh",
-      contactNumber: "+91 54321 09876",
-      location: "Vasant Kunj, New Delhi",
-      emergencyType: "Trauma",
-      status: "dispatched",
-      ambulanceId: "AMB-1003",
-      timestamp: "2023-05-15T12:45:00",
-    },
-  ])
-
-  // Mock ambulance data
-  const [ambulances, setAmbulances] = useState([
-    {
-      id: "AMB-1001",
-      driverName: "Rajesh Kumar",
-      vehicleNumber: "DL 01 AB 1234",
-      status: "available",
-      location: "North Delhi",
-      lastService: "2023-04-28",
-    },
-    {
-      id: "AMB-1002",
-      driverName: "Suresh Yadav",
-      vehicleNumber: "DL 01 CD 5678",
-      status: "on_call",
-      location: "South Delhi",
-      lastService: "2023-05-05",
-    },
-    {
-      id: "AMB-1003",
-      driverName: "Mahesh Singh",
-      vehicleNumber: "DL 01 EF 9012",
-      status: "on_call",
-      location: "West Delhi",
-      lastService: "2023-05-12",
-    },
-    {
-      id: "AMB-1004",
-      driverName: "Dinesh Gupta",
-      vehicleNumber: "DL 01 GH 3456",
-      status: "available",
-      location: "East Delhi",
-      lastService: "2023-04-15",
-    },
-    {
-      id: "AMB-1005",
-      driverName: "Ramesh Verma",
-      vehicleNumber: "DL 01 IJ 7890",
-      status: "maintenance",
-      location: "Workshop",
-      lastService: "2023-05-01",
-    },
-  ])
-
-  // Filter emergency calls based on search query
-  const filteredCalls = emergencyCalls.filter((call) => {
-    return (
-      call.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      call.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      call.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      call.emergencyType.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+  const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [requestStatus, setRequestStatus] = useState<"pending" | "dispatched" | "en-route" | "arrived" | null>(null)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [ambulanceLocation, setAmbulanceLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [emergencyDetails, setEmergencyDetails] = useState({
+    patientName: "",
+    contactNumber: "",
+    emergencyType: "",
+    description: "",
+    location: "",
   })
 
-  // Get available ambulances
-  const availableAmbulances = ambulances.filter((ambulance) => ambulance.status === "available")
-
-  const handleDispatchAmbulance = (callId: string, ambulanceId: string) => {
-    // Update emergency call
-    const updatedCalls = emergencyCalls.map((call) =>
-      call.id === callId ? { ...call, status: "dispatched", ambulanceId } : call,
-    )
-    setEmergencyCalls(updatedCalls)
-
-    // Update ambulance status
-    const updatedAmbulances = ambulances.map((ambulance) =>
-      ambulance.id === ambulanceId ? { ...ambulance, status: "on_call" } : ambulance,
-    )
-    setAmbulances(updatedAmbulances)
-
-    toast({
-      title: "Ambulance Dispatched",
-      description: `Ambulance ${ambulanceId} has been dispatched for emergency call ${callId}.`,
-    })
-  }
-
-  const handleCompleteCall = (callId: string, ambulanceId: string | null) => {
-    // Update emergency call
-    const updatedCalls = emergencyCalls.map((call) => (call.id === callId ? { ...call, status: "completed" } : call))
-    setEmergencyCalls(updatedCalls)
-
-    // Update ambulance status if there is one assigned
-    if (ambulanceId) {
-      const updatedAmbulances = ambulances.map((ambulance) =>
-        ambulance.id === ambulanceId ? { ...ambulance, status: "available" } : ambulance,
+  // Get user's location on component mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+        },
+        (error) => {
+          console.error("Error getting location:", error)
+          toast({
+            title: "Location Error",
+            description: "Unable to get your location. Please enable location services.",
+            variant: "destructive",
+          })
+          // Set default location (example: New Delhi)
+          setUserLocation({ lat: 28.6139, lng: 77.209 })
+        },
       )
-      setAmbulances(updatedAmbulances)
+    }
+  }, [toast])
+
+  // Simulate ambulance movement (in a real app, this would come from a backend)
+  useEffect(() => {
+    if (requestStatus === "dispatched" || requestStatus === "en-route") {
+      // Start with ambulance at a distance from the user
+      if (!ambulanceLocation && userLocation) {
+        setAmbulanceLocation({
+          lat: userLocation.lat + 0.01,
+          lng: userLocation.lng + 0.01,
+        })
+      }
+
+      // Move ambulance closer to user location
+      const interval = setInterval(() => {
+        if (ambulanceLocation && userLocation) {
+          const newLat = ambulanceLocation.lat + (userLocation.lat - ambulanceLocation.lat) * 0.1
+          const newLng = ambulanceLocation.lng + (userLocation.lng - ambulanceLocation.lng) * 0.1
+
+          setAmbulanceLocation({ lat: newLat, lng: newLng })
+
+          // Check if ambulance has arrived (close enough to user)
+          const distance = Math.sqrt(Math.pow(newLat - userLocation.lat, 2) + Math.pow(newLng - userLocation.lng, 2))
+
+          if (distance < 0.0005 && requestStatus === "en-route") {
+            setRequestStatus("arrived")
+            clearInterval(interval)
+          }
+        }
+      }, 2000)
+
+      return () => clearInterval(interval)
+    }
+  }, [requestStatus, ambulanceLocation, userLocation])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    // Validate form
+    if (!emergencyDetails.patientName || !emergencyDetails.contactNumber || !emergencyDetails.emergencyType) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      })
+      setLoading(false)
+      return
     }
 
-    toast({
-      title: "Emergency Call Completed",
-      description: `Emergency call ${callId} has been marked as completed.`,
-    })
+    try {
+      // In a real app, this would be an API call to request an ambulance
+      // await fetch('/api/emergency', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     ...emergencyDetails,
+      //     coordinates: userLocation
+      //   }),
+      // })
+
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      toast({
+        title: "Emergency Request Sent",
+        description: "Your request has been received. An ambulance will be dispatched shortly.",
+      })
+
+      setStep(2)
+      setRequestStatus("pending")
+
+      // Simulate ambulance being dispatched after a delay
+      setTimeout(() => {
+        setRequestStatus("dispatched")
+
+        // Simulate ambulance en-route after another delay
+        setTimeout(() => {
+          setRequestStatus("en-route")
+        }, 5000)
+      }, 5000)
+    } catch (error) {
+      console.error("Error requesting ambulance:", error)
+      toast({
+        title: "Request Failed",
+        description:
+          "There was a problem sending your emergency request. Please try again or call emergency services directly.",
+        variant: "destructive",
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -172,207 +167,335 @@ export default function AdminEmergencyPage() {
         className="flex flex-col gap-2 mb-8"
       >
         <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-          Emergency Management
+          Emergency Ambulance Request
         </h1>
-        <p className="text-muted-foreground">Monitor and manage emergency calls and ambulance dispatch</p>
+        <p className="text-muted-foreground">Request an ambulance for medical emergencies</p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Active Emergencies</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
-              {emergencyCalls.filter((call) => call.status !== "completed").length}
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {emergencyCalls.filter((call) => call.status === "pending").length} pending dispatch
-            </p>
-          </CardContent>
-        </Card>
+      {step === 1 ? (
+        <div className="grid gap-6 md:grid-cols-2">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle>Request Details</CardTitle>
+                <CardDescription>Please provide information about the emergency situation</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form id="emergency-form" onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="patientName">Patient Name</Label>
+                    <Input
+                      id="patientName"
+                      placeholder="Enter patient name"
+                      className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      value={emergencyDetails.patientName}
+                      onChange={(e) => setEmergencyDetails({ ...emergencyDetails, patientName: e.target.value })}
+                      required
+                    />
+                  </div>
 
-        <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Available Ambulances</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">
-              {ambulances.filter((ambulance) => ambulance.status === "available").length}
-            </div>
-            <p className="text-sm text-muted-foreground">
-              {ambulances.filter((ambulance) => ambulance.status === "on_call").length} currently on call
-            </p>
-          </CardContent>
-        </Card>
+                  <div className="space-y-2">
+                    <Label htmlFor="contactNumber">Contact Number</Label>
+                    <Input
+                      id="contactNumber"
+                      placeholder="Enter contact number"
+                      className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      value={emergencyDetails.contactNumber}
+                      onChange={(e) => setEmergencyDetails({ ...emergencyDetails, contactNumber: e.target.value })}
+                      required
+                    />
+                  </div>
 
-        <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Response Time</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">8.5 min</div>
-            <p className="text-sm text-muted-foreground">Average response time today</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search emergency calls..."
-            className="pl-10 border-primary/20 bg-primary/5 focus-visible:ring-primary w-full md:w-[300px]"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <Button className="bg-primary hover:bg-primary/90">Register New Emergency</Button>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>Emergency Calls</CardTitle>
-            <CardDescription>
-              {filteredCalls.length} {filteredCalls.length === 1 ? "call" : "calls"} found
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Emergency Type</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Ambulance</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCalls.map((call, index) => (
-                  <motion.tr
-                    key={call.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-primary/5"
-                  >
-                    <TableCell className="font-medium">{call.id}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span>{call.patientName}</span>
-                        <span className="text-xs text-muted-foreground">{call.contactNumber}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-primary/5 border-primary/20">
-                        {call.emergencyType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="truncate max-w-[150px]">{call.location}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4 text-muted-foreground" />
-                        <span>{new Date(call.timestamp).toLocaleTimeString()}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {call.ambulanceId ? (
-                        <span>{call.ambulanceId}</span>
-                      ) : (
-                        <span className="text-yellow-600 dark:text-yellow-400">Not assigned</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={
-                          call.status === "dispatched"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800"
-                            : call.status === "completed"
-                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 border-green-200 dark:border-green-800"
-                              : call.status === "in_progress"
-                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border-blue-200 dark:border-blue-800"
-                                : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 border-red-200 dark:border-red-800"
-                        }
+                  <div className="space-y-2">
+                    <Label htmlFor="emergencyType">Emergency Type</Label>
+                    <Select
+                      onValueChange={(value) => setEmergencyDetails({ ...emergencyDetails, emergencyType: value })}
+                      required
+                    >
+                      <SelectTrigger
+                        id="emergencyType"
+                        className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
                       >
-                        {call.status === "dispatched"
-                          ? "Dispatched"
-                          : call.status === "in_progress"
-                            ? "In Progress"
-                            : call.status === "completed"
-                              ? "Completed"
-                              : "Pending"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        {call.status === "pending" && (
-                          <select
-                            className="h-8 rounded-md border border-primary/20 bg-primary/5 px-2 text-xs"
-                            onChange={(e) => {
-                              if (e.target.value) {
-                                handleDispatchAmbulance(call.id, e.target.value)
-                              }
-                            }}
-                            defaultValue=""
-                          >
-                            <option value="" disabled>
-                              Dispatch Ambulance
-                            </option>
-                            {availableAmbulances.map((ambulance) => (
-                              <option key={ambulance.id} value={ambulance.id}>
-                                {ambulance.id} - {ambulance.location}
-                              </option>
-                            ))}
-                          </select>
-                        )}
+                        <SelectValue placeholder="Select emergency type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cardiac">Cardiac Emergency</SelectItem>
+                        <SelectItem value="respiratory">Respiratory Distress</SelectItem>
+                        <SelectItem value="trauma">Trauma/Injury</SelectItem>
+                        <SelectItem value="stroke">Stroke Symptoms</SelectItem>
+                        <SelectItem value="allergic">Severe Allergic Reaction</SelectItem>
+                        <SelectItem value="other">Other Medical Emergency</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                        {(call.status === "dispatched" || call.status === "in_progress") && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 hover:bg-green-100 hover:text-green-800"
-                            onClick={() => handleCompleteCall(call.id, call.ambulanceId)}
-                          >
-                            <CheckCircle className="h-4 w-4" />
-                            <span className="sr-only">Complete</span>
-                          </Button>
-                        )}
+                  <div className="space-y-2">
+                    <Label htmlFor="description">Additional Details</Label>
+                    <Textarea
+                      id="description"
+                      placeholder="Describe the emergency situation"
+                      className="border-primary/20 bg-primary/5 focus-visible:ring-primary min-h-[100px]"
+                      value={emergencyDetails.description}
+                      onChange={(e) => setEmergencyDetails({ ...emergencyDetails, description: e.target.value })}
+                    />
+                  </div>
 
-                        {call.status === "pending" && availableAmbulances.length === 0 && (
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 hover:bg-yellow-100 hover:text-yellow-800"
-                          >
-                            <AlertTriangle className="h-4 w-4" />
-                            <span className="sr-only">No Ambulances</span>
-                          </Button>
-                        )}
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Address (Optional)</Label>
+                    <Input
+                      id="location"
+                      placeholder="Enter address details to help the ambulance locate you"
+                      className="border-primary/20 bg-primary/5 focus-visible:ring-primary"
+                      value={emergencyDetails.location}
+                      onChange={(e) => setEmergencyDetails({ ...emergencyDetails, location: e.target.value })}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Your current location will be automatically shared with the ambulance service
+                    </p>
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter>
+                <GlowingButton type="submit" form="emergency-form" className="w-full" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <span className="animate-pulse mr-2">●</span>
+                      Processing Request...
+                    </>
+                  ) : (
+                    <>
+                      <Ambulance className="mr-2 h-4 w-4" />
+                      Request Ambulance
+                    </>
+                  )}
+                </GlowingButton>
+              </CardFooter>
+            </Card>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm h-full">
+              <CardHeader>
+                <CardTitle>Your Location</CardTitle>
+                <CardDescription>
+                  This is your current location that will be shared with emergency services
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                {userLocation ? (
+                  <MapComponent
+                    center={userLocation}
+                    zoom={15}
+                    markers={[
+                      {
+                        position: userLocation,
+                        popup: "Your current location",
+                        icon: "user",
+                      },
+                    ]}
+                  />
+                ) : (
+                  <div className="h-[300px] w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                    <div className="text-center p-4">
+                      <MapPin className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground">Accessing your location...</p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+              <CardFooter className="flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                  <p>In case of severe emergency, please also call emergency services directly.</p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full border-primary/20 bg-primary/5 hover:bg-primary/10"
+                  onClick={() => {
+                    // In a real app, this would call the emergency number
+                    toast({
+                      title: "Emergency Call",
+                      description: "This would initiate an emergency call in a real application.",
+                    })
+                  }}
+                >
+                  <Phone className="mr-2 h-4 w-4" />
+                  Call Emergency Services
+                </Button>
+              </CardFooter>
+            </Card>
+          </motion.div>
+        </div>
+      ) : (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <Card className="border-primary/20 bg-gradient-to-b from-primary/5 to-transparent backdrop-blur-sm">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle>Ambulance Status</CardTitle>
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`h-2 w-2 rounded-full ${requestStatus ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`}
+                  ></div>
+                  <span className="text-sm font-medium">
+                    {requestStatus === "pending" && "Finding ambulance..."}
+                    {requestStatus === "dispatched" && "Ambulance dispatched"}
+                    {requestStatus === "en-route" && "Ambulance en route"}
+                    {requestStatus === "arrived" && "Ambulance arrived"}
+                  </span>
+                </div>
+              </div>
+              <CardDescription>Track your ambulance in real-time</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="h-[400px] w-full rounded-lg overflow-hidden">
+                {userLocation ? (
+                  <MapComponent
+                    center={userLocation}
+                    zoom={15}
+                    markers={[
+                      {
+                        position: userLocation,
+                        popup: "Your location",
+                        icon: "user",
+                      },
+                      ...(ambulanceLocation
+                        ? [
+                            {
+                              position: ambulanceLocation,
+                              popup: "Ambulance location",
+                              icon: "ambulance",
+                            },
+                          ]
+                        : []),
+                    ]}
+                    polyline={ambulanceLocation ? [ambulanceLocation, userLocation] : undefined}
+                  />
+                ) : (
+                  <div className="h-full w-full bg-muted flex items-center justify-center">
+                    <p className="text-sm text-muted-foreground">Loading map...</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-sm text-muted-foreground mb-1">Estimated arrival time</p>
+                    <p className="text-lg font-semibold">
+                      {requestStatus === "pending" && "Calculating..."}
+                      {requestStatus === "dispatched" && "10-12 minutes"}
+                      {requestStatus === "en-route" && "5-7 minutes"}
+                      {requestStatus === "arrived" && "Arrived"}
+                    </p>
+                  </div>
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-sm text-muted-foreground mb-1">Ambulance ID</p>
+                    <p className="text-lg font-semibold">{requestStatus === "pending" ? "Assigning..." : "AMB-1004"}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-sm font-medium">Status Updates</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Emergency request received</p>
+                        <p className="text-xs text-muted-foreground flex items-center">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {new Date().toLocaleTimeString()}
+                        </p>
                       </div>
-                    </TableCell>
-                  </motion.tr>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </motion.div>
+                    </div>
+
+                    {(requestStatus === "dispatched" ||
+                      requestStatus === "en-route" ||
+                      requestStatus === "arrived") && (
+                      <div className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                        <div>
+                          <p className="font-medium">Ambulance dispatched</p>
+                          <p className="text-xs text-muted-foreground flex items-center">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {new Date(Date.now() - 5000).toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {(requestStatus === "en-route" || requestStatus === "arrived") && (
+                      <div className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                        <div>
+                          <p className="font-medium">Ambulance en route to your location</p>
+                          <p className="text-xs text-muted-foreground flex items-center">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {new Date(Date.now() - 10000).toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {requestStatus === "arrived" && (
+                      <div className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />
+                        <div>
+                          <p className="font-medium">Ambulance arrived at your location</p>
+                          <p className="text-xs text-muted-foreground flex items-center">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {new Date().toLocaleTimeString()}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4">
+              <Button
+                variant="outline"
+                className="w-full border-primary/20 bg-primary/5 hover:bg-primary/10"
+                onClick={() => {
+                  // In a real app, this would call the ambulance driver
+                  toast({
+                    title: "Contact Driver",
+                    description: "This would initiate a call to the ambulance driver in a real application.",
+                  })
+                }}
+              >
+                <Phone className="mr-2 h-4 w-4" />
+                Contact Ambulance Driver
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full border-destructive/20 bg-destructive/5 hover:bg-destructive/10 text-destructive"
+                onClick={() => {
+                  // In a real app, this would cancel the request
+                  toast({
+                    title: "Request Cancelled",
+                    description: "Your emergency request has been cancelled.",
+                  })
+                  setStep(1)
+                  setRequestStatus(null)
+                  setAmbulanceLocation(null)
+                }}
+              >
+                Cancel Request
+              </Button>
+            </CardFooter>
+          </Card>
+        </motion.div>
+      )}
     </div>
   )
 }

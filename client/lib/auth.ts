@@ -1,7 +1,7 @@
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
-import { FirebaseAdapter } from "@next-auth/firebase-adapter"
+import FirebaseAdapter from "@next-auth/firebase-adapter";
 import { cert } from "firebase-admin/app"
 import { db } from "./firebase-admin"
 

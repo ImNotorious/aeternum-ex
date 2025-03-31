@@ -43,7 +43,7 @@ export default function HospitalLoginPage() {
       await signInAsHospital(email, password)
       setShowSuccessAnimation(true)
       setTimeout(() => {
-        router.push("/admin/dashboard")
+        router.push("/hospital-dashboard")
       }, 1500)
     } catch (error: any) {
       setError(error.message || "Failed to sign in")
@@ -59,7 +59,7 @@ export default function HospitalLoginPage() {
       await signInWithGoogle(true) // Pass true to indicate hospital login
       setShowSuccessAnimation(true)
       setTimeout(() => {
-        router.push("/admin/dashboard")
+        router.push("/hospital-dashboard")
       }, 1500)
     } catch (error: any) {
       setError(error.message || "Failed to sign in with Google")

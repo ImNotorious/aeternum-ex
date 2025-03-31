@@ -6,15 +6,31 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+interface ProtectedRouteProps {
+  children: React.ReactNode
+  requiredRole?: string
+}
+
+export default function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/auth/login")
+    if (!loading) {
+      if (!user) {
+        router.push("/auth/login")
+      } else if (requiredRole && user.role !== requiredRole) {
+        // Redirect based on role
+        if (user.role === "patient") {
+          router.push("/patient-dashboard")
+        } else if (user.role === "hospital") {
+          router.push("/admin/dashboard")
+        } else {
+          router.push("/dashboard")
+        }
+      }
     }
-  }, [user, loading, router])
+  }, [user, loading, router, requiredRole])
 
   if (loading) {
     return (
@@ -25,6 +41,10 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
   }
 
   if (!user) {
+    return null
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
     return null
   }
 
