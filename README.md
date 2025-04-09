@@ -66,7 +66,7 @@ Akshat handled the backend architecture, API development, and database managemen
 
 Aryan designed and implemented the user interface using React.js. He also took charge of creating the presentation, business plan and future model to showcase Aeternum's capabilities.
 
-## Suman Sharma - Backend Developer
+## Nishit Kumar - Backend Developer
 
 Suman worked on backend infrastructure and system security, implementing authentication mechanisms and optimizing performance for a scalable SaaS model.
 
