@@ -68,7 +68,7 @@ Aryan designed and implemented the user interface using React.js. He also took c
 
 ## Nishit Kumar - Backend Developer
 
-Suman worked on backend infrastructure and system security, implementing authentication mechanisms and optimizing performance for a scalable SaaS model.
+Nishit worked on backend infrastructure and system security, implementing authentication mechanisms and optimizing performance for a scalable SaaS model.
 
 # Future Plans
 
